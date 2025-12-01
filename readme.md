@@ -72,19 +72,36 @@ The following problems were solved for the Full-Stack Engineer role:
 
 **Location:** [src/problem6/](src/problem6/)
 
-**Description:** Specification and documentation for an API service module handling live scoreboard updates.
+**Description:** Comprehensive specification and documentation for a scalable API service module handling live scoreboard updates with real-time WebSocket broadcasting, secure authentication, and multi-category support. Redis serves as the primary data store for leaderboards, enabling direct queries for optimal performance, with PostgreSQL for persistence.
+
+**Key Features:**
+
+-   RESTful API endpoints for scoreboard retrieval and score updates, supporting multiple categories (e.g., games, regions)
+-   WebSocket integration with rooms for real-time live updates per category
+-   Secure action token system with HMAC-SHA256 signing to prevent unauthorized score increases
+-   PostgreSQL database with scores table for per-category persistence and audit logging
+-   Redis primary data store with category-specific sorted sets for leaderboard management, storing only top 10 users per category
+-   Data synchronization strategy with periodic reconciliation between Redis and PostgreSQL
+-   Rate limiting, security measures against common attacks (OWASP guidelines), and comprehensive error handling
+-   Scalable architecture supporting up to 10,000 concurrent users, with horizontal scaling and category-based sharding options
+-   Detailed testing strategy, deployment guidelines, and monitoring with Prometheus/Grafana
 
 **Deliverables:**
 
--   README with module documentation
--   Flow diagram
--   Improvement suggestions
+-   README with module documentation, pseudocode examples, and API specifications
+-   Sequence and component architecture diagrams
+-   Database schema with scores and score_updates tables
+-   Redis caching strategy with category-specific keys
+-   WebSocket protocol and connection lifecycle
+-   Security, performance, and scalability considerations
+-   Improvement roadmap with implemented enhancements like data sync and multi-category support
 
 ## Technologies Used
 
 -   **Frontend:** HTML, CSS, JavaScript, Vite (bonus)
--   **Backend:** Node.js, Express.js, TypeScript
--   **Database:** SQLite (for Problem 5)
+-   **Backend:** Node.js, Express.js, TypeScript, Socket.io (for WebSocket)
+-   **Database:** SQLite (for Problem 5), PostgreSQL (for Problem 6 persistence)
+-   **Cache:** Redis (for Problem 6 leaderboard)
 -   **Tools:** Git, VS Code, TypeScript Compiler
 
 ## Setup and Installation
