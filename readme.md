@@ -40,13 +40,21 @@ The following problems were solved for the Full-Stack Engineer role:
 
 **Location:** [src/problem4/](src/problem4/)
 
-**Description:** Three unique TypeScript implementations of a summation function with complexity analysis.
+**Description:** Three unique TypeScript implementations of a summation function with comprehensive mathematical proofs and complexity analysis.
 
 **Implementations:**
 
--   Iterative approach
--   Mathematical formula
--   Recursive method
+-   **Iterative approach** (O(n) time, O(1) space): Simple loop summation
+-   **Mathematical formula** (O(1) time, O(1) space): Closed-form formula n(n+1)/2 with multiple proofs
+-   **Divide and conquer** (O(log n) space, O(n) time): Recursive approach with algebraic derivation
+
+**Key Features:**
+
+-   Comprehensive JSDoc documentation
+-   Mathematical proofs for formula correctness
+-   Edge case handling (n=0)
+-   TypeScript type safety
+-   Comprehensive test suite with multiple test cases
 
 ### Problem 5: A Crude Server
 
@@ -77,7 +85,7 @@ The following problems were solved for the Full-Stack Engineer role:
 -   **Frontend:** HTML, CSS, JavaScript, Vite (bonus)
 -   **Backend:** Node.js, Express.js, TypeScript
 -   **Database:** SQLite (for Problem 5)
--   **Tools:** Git, VS Code
+-   **Tools:** Git, VS Code, TypeScript Compiler
 
 ## Setup and Installation
 
@@ -102,11 +110,13 @@ Navigate to `src/problem2/` and open `index.html` in a browser, or run with Vite
 
 ### Problem 4: Three ways to sum to n
 
-Run the TypeScript file:
+Run the test suite to verify all implementations:
 
 ```bash
-npx ts-node src/problem4/solution.ts
+npx ts-node src/problem4/test.ts
 ```
+
+This will test all three functions (iterative, formula, recursive) with various inputs including edge cases.
 
 ### Problem 5: A Crude Server
 
@@ -126,5 +136,6 @@ Refer to the README.md in `src/problem6/` for the specification.
 ## Notes
 
 -   All problems have been attempted with minimal viable solutions.
+-   Problem 4 includes comprehensive mathematical proofs, algorithmic analysis, and a test suite.
 -   Assumptions are documented in each problem's solution.
 -   For any uncertainties, I've noted them in the respective files.
