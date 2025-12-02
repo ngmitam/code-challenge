@@ -2,6 +2,19 @@
 
 This is a simple backend server built with Express.js and TypeScript, providing CRUD operations for items stored in a SQLite/PostgreSQL database using TypeORM. The application includes input validation, security middleware, logging, authentication, rate limiting, and comprehensive testing.
 
+## 🚀 Standalone Project
+
+This is a **complete, production-ready Node.js backend API server** that can be developed, tested, and deployed independently. It contains everything needed for a modern REST API service:
+
+-   ✅ **Independent Dependencies**: Own `package.json` with Express, TypeScript, TypeORM
+-   ✅ **Complete Source Code**: API routes, middleware, database models, utilities
+-   ✅ **Comprehensive Testing**: 184 tests including unit, integration, E2E, and load testing
+-   ✅ **Database Setup**: SQLite/PostgreSQL with migrations and seeding
+-   ✅ **CI/CD Pipeline**: GitHub Actions with automated testing and deployment
+-   ✅ **Container Ready**: Docker multi-stage builds with service orchestration
+-   ✅ **Cloud Ready**: Kubernetes manifests for production deployment
+-   ✅ **Documentation**: Complete API documentation and setup guide
+
 ## Features
 
 -   ✅ **API Versioning**: RESTful API with v1 endpoints (`/api/v1/*`)
@@ -451,11 +464,53 @@ npm run lint:fix
 
 ## CI/CD
 
-This project uses GitHub Actions for continuous integration. The CI pipeline runs on every push and pull request to the main branch, performing:
+This project uses GitHub Actions for comprehensive continuous integration and deployment. The CI/CD pipeline runs on every push and pull request to main/develop branches, performing:
 
--   Dependency installation
--   Linting
--   Automated tests
+### Pipeline Stages
+
+**Test Stage:**
+
+-   Matrix testing across Node.js 18.x and 20.x
+-   PostgreSQL and Redis service containers for integration testing
+-   Security audit with npm audit
+-   ESLint code quality checks
+-   Unit tests, integration tests, and E2E tests
+-   Coverage reporting to Codecov with 70%+ thresholds
+-   Build artifact uploads
+
+**Docker Stage:**
+
+-   Multi-stage Docker image building with caching
+-   Optimized production images
+
+**Load Testing Stage:**
+
+-   K6 load testing against running application
+-   Performance validation before deployment
+
+**Deploy Stage:**
+
+-   Automated deployment to staging on main branch pushes
+-   Ready for production deployment integration
+
+### Available Scripts
+
+```bash
+npm test              # Run all tests (unit + integration + E2E)
+npm run test:unit     # Run unit tests only
+npm run test:integration # Run integration tests only
+npm run test:e2e      # Run E2E tests only
+npm run test:coverage # Run tests with coverage report
+npm run test:load:k6  # Run K6 load tests
+```
+
+### Pipeline Features
+
+-   **Path-based triggers**: Only runs when problem5 files change
+-   **Service dependencies**: PostgreSQL and Redis for realistic testing
+-   **Artifact management**: Build and test result artifacts
+-   **Security scanning**: Automated dependency vulnerability checks
+-   **Performance validation**: Load testing ensures production readiness
 
 ## Scaling and Production Deployment
 

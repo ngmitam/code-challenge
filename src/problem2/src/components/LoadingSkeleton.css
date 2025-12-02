@@ -1,0 +1,59 @@
+.skeleton {
+	animation: pulse 1.5s ease-in-out infinite;
+	background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+	background-size: 200% 100%;
+	border-radius: 4px;
+}
+
+.skeleton-title {
+	height: 24px;
+	width: 60px;
+	margin-bottom: 30px;
+}
+
+.skeleton-label {
+	height: 16px;
+	width: 40px;
+	margin-bottom: 8px;
+}
+
+.skeleton-icon {
+	height: 30px;
+	width: 30px;
+	border-radius: 50%;
+	margin-right: 10px;
+}
+
+.skeleton-select {
+	height: 40px;
+	width: 100%;
+	flex: 1;
+}
+
+.skeleton-input {
+	height: 40px;
+	width: 100%;
+	margin-top: 10px;
+}
+
+.skeleton-arrow {
+	height: 24px;
+	width: 24px;
+	align-self: center;
+	margin: 0 20px;
+}
+
+.skeleton-button {
+	height: 45px;
+	width: 100%;
+	margin-top: 30px;
+}
+
+@keyframes pulse {
+	0% {
+		background-position: 200% 0;
+	}
+	100% {
+		background-position: -200% 0;
+	}
+}

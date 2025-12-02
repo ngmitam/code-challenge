@@ -1,0 +1,115 @@
+name: Code Quality Checks
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'src/problem2/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'src/problem2/**'
+  schedule:
+    # Run weekly on Mondays at 9 AM UTC
+    - cron: '0 9 * * 1'
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: src/problem2
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: src/problem2/package-lock.json
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run security audit
+      run: npm audit --audit-level moderate
+      continue-on-error: true
+
+    - name: Run npm audit fix (dry run)
+      run: npm audit fix --dry-run
+      continue-on-error: true
+
+  code-coverage:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: src/problem2
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: src/problem2/package-lock.json
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run tests with coverage
+      run: npm run test:coverage
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        file: src/problem2/coverage/lcov.info
+        flags: problem2
+        name: problem2-coverage
+        fail_ci_if_error: false
+
+  performance-check:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: src/problem2
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: src/problem2/package-lock.json
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build with bundle analyzer
+      run: ANALYZE=true npm run build
+
+    - name: Check bundle size
+      run: |
+        if [ -f dist/assets/*.js ]; then
+          echo "Bundle sizes:"
+          ls -lh dist/assets/*.js
+          # Check if main bundle is too large (> 500KB)
+          MAIN_BUNDLE=$(find dist/assets -name "*.js" -type f -exec ls -S {} + | head -1)
+          SIZE=$(stat -f%z "$MAIN_BUNDLE" 2>/dev/null || stat -c%s "$MAIN_BUNDLE")
+          if [ "$SIZE" -gt 524288 ]; then
+            echo "⚠️  Warning: Main bundle size ($SIZE bytes) exceeds 500KB"
+          else
+            echo "✅ Bundle size is acceptable"
+          fi
+        fi
