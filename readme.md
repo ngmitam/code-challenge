@@ -46,7 +46,7 @@ The following problems were solved for the Full-Stack Engineer role:
 
 -   **Iterative approach** (O(n) time, O(1) space): Simple loop summation
 -   **Mathematical formula** (O(1) time, O(1) space): Closed-form formula n(n+1)/2 with multiple proofs
--   **Divide and conquer** (O(log n) space, O(n) time): Recursive approach with algebraic derivation
+-   **Divide and conquer** (O(log n) time, O(log n) space): Recursive approach with algebraic derivation
 
 **Key Features:**
 
@@ -60,13 +60,24 @@ The following problems were solved for the Full-Stack Engineer role:
 
 **Location:** [src/problem5/](src/problem5/)
 
-**Description:** A backend server with CRUD operations using Express.js and TypeScript, connected to a SQLite database.
+**Description:** A comprehensive backend server with CRUD operations using Express.js and TypeScript, featuring authentication, caching, and containerization.
 
 **Features:**
 
--   RESTful API endpoints
--   Data persistence with SQLite
--   Basic filtering
+-   RESTful API endpoints with versioning
+-   JWT-based user authentication and registration
+-   Data persistence with SQLite/PostgreSQL using TypeORM
+-   Soft delete functionality
+-   Input validation with Zod schemas
+-   Redis-backed caching with fallback
+-   Security middleware (Helmet, CORS, rate limiting)
+-   Structured logging with Winston
+-   Health checks and metrics
+-   Swagger/OpenAPI documentation
+-   Docker containerization
+-   Kubernetes deployment manifests
+-   Comprehensive testing with Jest (unit, integration, and E2E tests with Docker)
+-   CI/CD with GitHub Actions
 
 ### Problem 6: Architecture
 
@@ -137,10 +148,29 @@ This will test all three functions (iterative, formula, recursive) with various 
 
 ### Problem 5: A Crude Server
 
-Start the server:
+Navigate to the problem directory and install dependencies:
 
 ```bash
 cd src/problem5
+npm install
+```
+
+Create a `.env` file in the root directory:
+
+```env
+PORT=3000
+NODE_ENV=development
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+LOG_LEVEL=info
+USE_REDIS=false
+REDIS_HOST=localhost
+REDIS_PORT=6379
+```
+
+Build and start the server:
+
+```bash
+npm run build
 npm start
 ```
 

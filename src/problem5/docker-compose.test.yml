@@ -1,0 +1,124 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: problem5_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"  # Use different port for tests
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - test-network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"  # Use different port for tests
+    volumes:
+      - redis_test_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - test-network
+
+  app:
+    build: .
+    ports:
+      - "3001:3000"  # Use different port for tests
+    environment:
+      - NODE_ENV=test
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/problem5_test
+      - USE_REDIS=true
+      - REDIS_HOST=redis
+      - PORT=3000
+      - JWT_SECRET=test-jwt-secret-for-e2e-testing
+      - BCRYPT_ROUNDS=10
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm start
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - test-network
+
+  load-test:
+    build: .
+    environment:
+      - NODE_ENV=test
+      - TEST_BASE_URL=http://app:3000
+    depends_on:
+      app:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run test:load:internal
+    profiles:
+      - load
+    networks:
+      - test-network
+
+  k6-load-test:
+    image: grafana/k6:latest
+    environment:
+      - BASE_URL=http://app:3000
+    volumes:
+      - ./scripts/load-test-k6.js:/scripts/load-test-k6.js
+    command: run /scripts/load-test-k6.js
+    depends_on:
+      app:
+        condition: service_healthy
+    profiles:
+      - k6
+    networks:
+      - test-network
+
+  e2e-tests:
+    build: .
+    environment:
+      - NODE_ENV=test
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/problem5_test
+      - USE_REDIS=true
+      - REDIS_HOST=redis
+      - TEST_BASE_URL=http://app:3000
+      - PORT=3000
+      - JWT_SECRET=test-jwt-secret-for-e2e-testing
+      - BCRYPT_ROUNDS=10
+    depends_on:
+      app:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run test:e2e
+    profiles:
+      - test
+    networks:
+      - test-network
+
+networks:
+  test-network:
+
+volumes:
+  postgres_test_data:
+  redis_test_data:
